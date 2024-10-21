@@ -1,0 +1,139 @@
+import pygame
+
+pygame.init()
+
+screen_width = 800
+screen_height = 600
+screen = pygame.display.set_mode((screen_width,screen_height))
+
+#set title
+pygame.display.set_caption("SNAKE GAME")
+
+running = True
+while running:
+      for event in pygame.event.get():
+           if event.type == pygame.QUIT:
+                 running = False
+
+      screen.fill((0,0,0,))
+      pygame.display.update()
+
+pygame.QUIT()
+
+#players setting
+player_width , player_height = 50,50
+player_x,player_y = screen_width // 2 , screen_height - player_height
+player_speed = 5
+
+
+#gameloop
+
+while running:
+      for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                  running = False
+      #get keys presssed
+      keys = pygame.key.get_pressed()
+      #move player
+      if keys[pygame.K_LEFT] and player_x > 0:
+            player_x -= player_speed
+      if keys[pygame.K_RIGHT] and player_x  < screen_width - player_width:
+            player_x += player_speed
+
+
+       #clear screen
+      screen.fill((0,0,0))
+
+      pygame.draw.rect(screen,(0,255,0),(player_x,player_y,player_width,player_height))
+
+
+      pygame.display.update()
+
+pygame.QUIT()                              
+
+# enemies and collisions
+import random
+
+
+enemy_width, enemy_height = 50,50
+enemy_x = random.randiant(0, screen_width - enemy_width)
+enemy_y = 0
+enemy_speed = 5
+
+#game loop
+while running:
+      for event in pygame.event.get():
+            if event.type == pygame.QUIT():
+             running = False
+
+      keys = pygame.key.get_pressed()
+
+      if keys[pygame.K_LEFT] and player_x > 0:
+         player_x -= player_speed
+      if keys[pygame.K_RIGHT] and player_x < screen_width - player_width:
+           player_x+= player_speed
+
+      #move enemy
+      enemy_y += enemy_speed
+      if enemy_y > screen_height:
+           enemy_y = 0
+           enemy_x = random.randint(0,screen_width - enemy_width)
+      #check for collision
+      if(player_x <enemy_x + enemy_width and
+         player_x + player_width>enemy_x and
+         player_y< enemy_y + enemy_height and
+         player_y + player_height > enemy_y):
+         print("COLLISION!")
+         running = False
+
+      screen.fill((0,0,0))
+
+
+      pygame.draw.rect(screen,(0,255,0),player_x,player_y,player_width,player_height)
+      pygame.draw.rect(screen,(255,0,0),enemy_x,enemy_y,enemy_height,enemy_width)
+
+      pygame.display.update()
+pygame.quit()
+
+
+#initializing font
+font = pygame.font.SysFont(None,36)
+
+#game loop
+score = 0
+while running:
+     for enent in pygame.event.get():
+          if event.type== pygame.QUIT:
+               running = False
+     keys = pygame.key.get_pressed()
+
+     if keys[pygame.K_LEFT] and player_x > 0:
+          player_x -= player_speed
+     if keys[pygame.K_RIGHT] and player_x< screen_width - player_width:
+          player_x += player_speed
+
+     enemy_y += enemy_speed
+     if enemy_y > screen_height:
+          enemy_y = 0
+          enemy_x = random.randiant(0,screen_width - enemy_width)
+          score+= 1
+     if (player_x< enemy_x + enemy_width and
+         player_x + player_width > enemy_x and
+         player_y < enemy_y + enemy_height and
+         player_y + player_height > enemy_y):
+         print("COLLISIION!")
+         running = False
+     screen.fill((0,0,0))
+
+     pygame.draw.rect(screen, (0, 255, 0), (player_x, player_y, player_width, player_height))
+     pygame.draw.rect(screen, (255, 0, 0), (enemy_x, enemy_y, enemy_width, enemy_height))
+
+    # Display score
+     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+     screen.blit(score_text, (10, 10))
+
+     pygame.display.update()
+
+pygame.quit()           
+
+
